@@ -45,10 +45,10 @@ console.assert((() => {
 
 let g4 = new Game();
 console.assert((() => {
-    const s1 = g4.playAt('cats', {x: 1, y: 4}, true); // should be 18
-    const s2 = g4.playAt('bears', {x: 6, y: 14}, false); // should be 15
-    const s3 = g4.playAt('dogs', {x: 12, y: 15}, false); // should be 24
-    const s4 = g4.playAt('rea*y', {x: 8, y: 1}, false); // should be 21
+    const s1 = g4.playAt('cats', {x: 1, y: 4}, true); 
+    const s2 = g4.playAt('bears', {x: 6, y: 14}, false); 
+    const s3 = g4.playAt('dogs', {x: 12, y: 15}, false); 
+    const s4 = g4.playAt('rea*y', {x: 8, y: 1}, false); 
     console.log(g4.getGrid());
     console.log(s1);
     console.log(s2);
