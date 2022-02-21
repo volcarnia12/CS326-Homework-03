@@ -1,8 +1,24 @@
 "use strict";
 
+import { shuffle } from "./shuffle.js";
+import { canConstructWord, baseScore, possibleWords, bestPossibleWords, makeWord } from "/326-homework-02-scrabble-utilities-volcarnia12/scrabbleUtils.js";
+
+
 class Game {
   constructor() {
     // TODO
+    this.array = ['e','e','e','e','e','e','e','e','e','e','e','e','a','a','a','a','a','a','a','a','a','i','i','i','i',
+            'i','i','i','i','i','o','o','o','o','o','o','o','o','n','n','n','n','n','n','r','r','r','r','r','r',
+            't','t','t','t','t','t','l','l','l','l','s','s','s','s','u','u','u','u','d','d','d','d','g','g','g',
+            'b','b','c','c','m','m','p','p','f','f','h','h','v','v','w','w','y','y','k','j','x','q','z'];
+    shuffle(this.array);
+    this.board = [];
+    for (let x = 0; x < 15; ++x){
+      this.board[x] = [''];
+      for (let y = 0; y < 15; ++y){
+        this.board[x][y] = [''];
+      }
+    }
   }
 
   /**
@@ -14,6 +30,20 @@ class Game {
    */
   takeFromBag(n) {
     // TODO
+    let array = [];
+    if (this.array.length === 0){
+      return array;
+    }
+    if (this.array.length < n){
+      array = this.array;
+      this.array = [];
+      return array;
+    }
+    for (let x = 0; x < n; ++x){
+      array.push(this.array[x]);
+    }
+    this.array = this.array.slice(n);
+    return array;
   }
 
   /**
@@ -24,6 +54,7 @@ class Game {
    */
   getGrid() {
     // TODO
+    return this.board;
   }
 
   /**
@@ -41,6 +72,52 @@ class Game {
    */
   playAt(word, position, direction) {
     // TODO
+    let validWord = true;
+    let score = 0;
+    for (let i = 0; i < word.length; ++i){
+      if (direction && (word.length <= 15 - (position.y - 1))){
+        let row = position.x - 1;
+        let column = position.y + i - 1;
+        if (this.board[row][column] != ""){
+          validWord = false;
+          break;
+        }
+      }
+      else if (direction && (word.length > 15 - (position.y - 1))){
+        validWord = false;
+        break;
+      }
+      else if (!direction && (word.length <= 15 - (position.x - 1))){
+        let row = position.x + i - 1;
+        let column = position.y - 1;
+        if (this.board[row][column] != ""){
+          validWord = false;
+          break;
+        }
+      }
+      else if (!direction && (word.length > 15 - (position.x - 1))){
+        validWord = false;
+        break;
+      }
+    }
+    if (!validWord){ 
+      return -1;
+    }
+    for(let i = 0; i < word.length; ++i){
+      if (direction){
+        let row = position.x - 1;
+        let column = position.y + i - 1;
+        this.board[row][column] = word[i];
+      }
+      else{
+        let row = position.x + i - 1;
+        let column = position.y - 1;
+        this.board[row][column] = word[i];
+      }
+    }
+    
+    score = baseScore(word);
+    return score;
   }
 }
 
